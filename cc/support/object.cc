@@ -10,8 +10,8 @@
  *   Copyrights from authors other than Serge Lussier also apply here      *
  ***************************************************************************/
 
-#include "lus/support/object.h"
-#include "lus/book/book.h"
+#include "intui/support/object.h"
+#include "intui/book/book.h"
 namespace lus
 {
 

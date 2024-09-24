@@ -19,7 +19,7 @@
 //#pragma once
 
 
-#include "lus/support/sscan.h"
+#include "intui/support/sscan.h"
 
 namespace lus
 {

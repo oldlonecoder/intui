@@ -15,7 +15,7 @@
  *   Copyrights from authors other than Serge Lussier also apply here      *
  ***************************************************************************/
 
-#include "lus/intui/events.h"
+#include "intui/events.h"
 #include <sys/select.h>
 #include <sys/ioctl.h>
 namespace lus::intui

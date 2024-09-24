@@ -11,8 +11,8 @@
  ***************************************************************************/
 
 
-#include "lus/support/cmdargs.h"
-#include "lus/book/book.h"
+#include "intui/support/cmdargs.h"
+#include "intui/book/book.h"
 
 
 

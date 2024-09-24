@@ -10,7 +10,7 @@
  *   Copyrights from authors other than Serge Lussier also apply here      *
  ***************************************************************************/
 
-#include "lus/support/colors.h"
+#include "intui/support/colors.h"
 #include <iostream>
 #include <cstring>
 #include <sstream>

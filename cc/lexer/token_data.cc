@@ -2,9 +2,9 @@
 // Created by oldlonecoder on 24-01-27.
 //
 
-#include "lus/lexer/token_data.h"
-#include <lus/support/sscan.h>
-#include <lus/support/geometry.h>
+#include "intui/lexer/token_data.h"
+#include <intui/support/sscan.h>
+#include <intui/support/geometry.h>
 #include <format>
 
 static std::string_view NullMsg { "No String" };

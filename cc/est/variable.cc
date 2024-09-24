@@ -2,7 +2,7 @@
 // Created by oldlonecoder on 8/19/24.
 //
 
-#include "lus/est/variable.h"
+#include "intui/est/variable.h"
 
 /******************************************************************************************
  *   Copyright (C) 1965/1987/2023 by Serge Lussier                                        *

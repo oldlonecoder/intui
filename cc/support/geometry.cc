@@ -2,8 +2,8 @@
 // Created by oldlonecoder on 10/29/23.
 //
 
-#include "lus/support/geometry.h"
-#include "lus/book/book.h"
+#include "intui/support/geometry.h"
+#include "intui/book/book.h"
 
 
 namespace lus::ui

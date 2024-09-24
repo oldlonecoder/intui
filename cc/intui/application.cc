@@ -1,5 +1,5 @@
-#include "lus/intui/application.h"
-#include "lus/intui/io/linux/terminal.h"
+#include "intui/application.h"
+#include "intui/io/linux/terminal.h"
 #include <csignal>
 
 

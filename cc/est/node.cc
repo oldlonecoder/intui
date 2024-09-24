@@ -2,7 +2,7 @@
 // Created by oldlonecoder on 8/17/24.
 //
 
-#include "lus/est/node.h"
+#include "intui/est/node.h"
 
 /******************************************************************************************
  *   Copyright (C) 1965/1987/2023 by Serge Lussier                                        *

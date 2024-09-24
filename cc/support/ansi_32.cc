@@ -2,8 +2,8 @@
 // Created by oldlonecoder on 8/21/24.
 //
 
-#include "lus/support/ansi_32.h"
-#include "lus/support/string.h"
+#include "intui/support/ansi_32.h"
+#include "intui/support/string.h"
 /******************************************************************************************
  *   Copyright (C) 1965/1987/2023 by Serge Lussier                                        *
  *   serge.lussier@oldlonecoder.club                                                      *
@@ -19,8 +19,8 @@
  ******************************************************************************************/
 
 //#pragma once
-#include "lus/support/ansi_32.h"
-#include "lus/book/book.h"
+#include "intui/support/ansi_32.h"
+#include "intui/book/book.h"
 
 
 

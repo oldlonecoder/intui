@@ -1,4 +1,4 @@
-#include "lus/intui/io/linux/terminal.h"
+#include "intui/io/linux/terminal.h"
 
 #include <sys/ioctl.h>
 #include <sys/epoll.h>   ///< linux specific input polling

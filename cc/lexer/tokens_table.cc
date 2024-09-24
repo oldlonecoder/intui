@@ -1,8 +1,8 @@
 //
 // Created by oldlonecoder on 24-01-27.
 //
-#include "lus/lexer/tokens_table.h"
-#include <lus/book/book.h>
+#include "intui/lexer/tokens_table.h"
+#include <intui/book/book.h>
 
 namespace lus
 {

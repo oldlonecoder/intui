@@ -1,12 +1,12 @@
-#include "lus/book/book.h"
-#include "lus/support/sscan.h"
-//#include "lus/lexer/lexer.h"
-//#include "lus/est/alu.h"
-#include "lus/est/expression.h"
-//#include "lus/intui/elements/element.h"
-#include "lus/intui/io/linux/terminal.h"
-#include "lus/intui/events.h"
-#include "lus/intui/application.h"
+#include "intui/book/book.h"
+#include "intui/support/sscan.h"
+//#include "intui/lexer/lexer.h"
+//#include "intui/est/alu.h"
+#include "intui/est/expression.h"
+//#include "intui/elements/element.h"
+#include "intui/io/linux/terminal.h"
+#include "intui/events.h"
+#include "intui/application.h"
 
 
 

@@ -1,9 +1,9 @@
 
 
-#include "lus/support/colors.h"
+#include "intui/support/colors.h"
 #include <sys/epoll.h>
 #include <unistd.h>
-#include "lus/intui/globals.h"
+#include "intui/globals.h"
 
 namespace lus::intui::globals::colors
 {

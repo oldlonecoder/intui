@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.13..3.29 FATAL_ERROR)
-project(lus VERSION 0.1.0 LANGUAGES CXX)
+project(intui VERSION 0.1.0 LANGUAGES CXX)
 set(BaseTarget ${PROJECT_NAME})
 
 set(CMAKE_CXX_STANDARD 20)
@@ -20,7 +20,6 @@ add_library(${BaseTarget} STATIC  #SHARED
             include/${BaseTarget}/support/signals.h
             include/${BaseTarget}/support/cmdargs.h cc/support/cmdargs.cc            
             include/${BaseTarget}/support/object.h cc/support/object.cc
-            #include/${BaseTarget}/book/enums.h          cc/book/enums.cc
             include/${BaseTarget}/book/book.h cc/book/book.cc
             include/${BaseTarget}/lexer/lexer_types.h cc/lexer/lexer_types.cc
             include/${BaseTarget}/lexer/token_data.h cc/lexer/token_data.cc
@@ -31,11 +30,11 @@ add_library(${BaseTarget} STATIC  #SHARED
             include/${BaseTarget}/est/variable.h cc/est/variable.cc
             include/${BaseTarget}/est/bloc.h cc/est/bloc.cc
             include/${BaseTarget}/est/expression.h cc/est/expression.cc
-            include/${BaseTarget}/intui/globals.h cc/intui/globals.cc
-            include/${BaseTarget}/intui/io/linux/terminal.h cc/intui/io/linux/terminal.cc
-            include/${BaseTarget}/intui/elements/element.h  cc/intui/elements/element.cc
-            include/${BaseTarget}/intui/events.h             cc/intui/events.cc
-            include/${BaseTarget}/intui/application.h        cc/intui/application.cc
+            include/${BaseTarget}/globals.h cc/intui/globals.cc
+            include/${BaseTarget}/io/linux/terminal.h cc/intui/io/linux/terminal.cc
+            include/${BaseTarget}/elements/element.h  cc/intui/elements/element.cc
+            include/${BaseTarget}/events.h             cc/intui/events.cc
+            include/${BaseTarget}/application.h        cc/intui/application.cc
             
 )
 

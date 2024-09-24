@@ -12,8 +12,8 @@
  *   ----------------------------------------------------------------------------------   *
  ******************************************************************************************/
 
-#include "lus/est/alu.h"
-#include "lus/book/book.h"
+#include "intui/est/alu.h"
+#include "intui/book/book.h"
 
 using namespace integers;
 

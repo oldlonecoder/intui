@@ -2,7 +2,7 @@
 // Created by oldlonecoder on 24-03-08.
 //
 
-#include "lus/lexer/lexer.h"
+#include "intui/lexer/lexer.h"
 
 namespace lus
 {

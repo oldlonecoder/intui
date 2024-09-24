@@ -2,8 +2,8 @@
 // Created by oldlonecoder on 8/22/24.
 //
 
-#include "lus/lexer/lexer_types.h"
-#include "lus/support/string.h"
+#include "intui/lexer/lexer_types.h"
+#include "intui/support/string.h"
 
 namespace lus
 {
