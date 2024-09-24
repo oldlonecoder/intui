@@ -1,5 +1,5 @@
 
-# lus :  { Personal Application Tools and Journal API }
+# intui :  { Personal Application Tools and Journal API }
 
 ---
 
