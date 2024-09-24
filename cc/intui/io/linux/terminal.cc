@@ -62,6 +62,7 @@ book::code terminal::begin()
     //SetCursorShape(ConIO::CShapes::BlockBlink);
     ::signal(SIGWINCH, &terminal::resize_signal);
     terminal::cursor_off();
+    terminal::instance().start_mouse();
     return book::code::done;
 }
 
@@ -72,6 +73,7 @@ book::code terminal::terminal::end()
     switch_back();
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &saved_st);
     cursor_on();
+    terminal::instance().stop_mouse();
     return book::code::done;
 }
 

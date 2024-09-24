@@ -99,7 +99,7 @@ int main()
        book::status() << book::code::success ;
 
     terminal.begin();
-    terminal.start_mouse();
+    
     lus::intui::event event{};
     book::code C{book::code::ok};
 

@@ -40,7 +40,7 @@ namespace lus::intui
 
 
 /**
- * @brief class terminal initilizes and execute and interprets io requests in the ansi-/DEC/VT-x protocoles.
+ * @brief class terminal initilizes and handles few console/terminal io requests in the ansi-/DEC/VT-x protocoles.
  * 
  */
 class LUS_API terminal final
