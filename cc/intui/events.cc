@@ -17,17 +17,14 @@
 
 #include "lus/intui/events.h"
 #include <sys/select.h>
-#include <cstring>
-
+#include <sys/ioctl.h>
 namespace lus::intui
 {
 
-keyevent keyevent::nokey{0,"nan",keyevent::None};
+keyevent keyevent::nokey{};
 mouse event::mouse_dev{};
 
 // This is the permanent stdin input flags for the duration of the intui application:
-
-
 //-----------------------------------------------------------------------------------
 
 
@@ -244,7 +241,6 @@ event::operator bool()
 book::code event::get_stdin_event(event &_event_, int msec)
 {
     book::log() << book::fn::function;
-    book::out() << "Testing sys/select with timeval{0,0}:";
     timeval tv = {10, 0};
     fd_set fds;
     FD_ZERO(&fds);                                          // NOLINT
@@ -257,17 +253,17 @@ book::code event::get_stdin_event(event &_event_, int msec)
         _event_.event_type = event::type::noop;
         return book::code::timeout;
     }
-
-    book::out() << " Reading stdin event :";
+    int pksize{0};
+    ioctl(0,FIONREAD,&pksize);
+    book::out() << " STD INPUT EVENT  : " << ui::color::yellow << pksize << ui::color::reset << " bytes";
     char buffer[100];
-    //ioctl(0,FIONREAD,&pksize);
+    
     size_t r = ::read(STDIN_FILENO, buffer, 100);
     buffer[r] = 0;
     book::out() << "{" << ui::color::yellow << lus::string::bytes(buffer) << ui::color::reset << "}";
+
     conio_parser cparser;
-    _event_.buffer = std::move(buffer);
-    buffer[0]=0;
-    _event_.event_type = cparser.parse(_event_);
+    _event_.event_type = cparser.parse(_event_, buffer);
 
     if(_event_.event_type == event::type::DROP)
         return book::code::rejected;
@@ -343,11 +339,10 @@ event::conio_parser::~conio_parser()
 
 
 
-event::type event::conio_parser::parse(event &_ev_)
+event::type event::conio_parser::parse(event &_ev_, const char *a_seq_)
 {
     book::log() << book::fn::function;
-
-    _seq_ = _ev_.buffer.c_str(); ///@todo MSVC forbids constructing string_view with const char* - Will be changed across this entire project after tests on my Linux Desktop.
+    _seq_ = a_seq_; ///@todo handle MSVC craps that forbid "const char*" to be used to construct their string_view !!!
     it = _seq_.begin();
 
     // L'on s'occupe des CSI (Control Sequence Introducer) avant tout:
@@ -356,19 +351,36 @@ event::type event::conio_parser::parse(event &_ev_)
     {
         // systematic/explicitely ESC pressed:
         _ev_.data.kev = keyevent::query(27l);
-        std::cout << "\r\n\"" << _ev_.data.kev.description << "\"\r\n";
+        book::out() << _ev_.data.kev.description ;
         _ev_.event_type = event::type::key_command;
         return _ev_.event_type;
     }
     
     //---------------------------------------------------------------
+    // Not ESC seq. 
+    // Check CTRL hit ( *it < ascii(32) ) + ENTER,TAB, BACKSP ...
+    // One Byte key. All extra keys are ignored/discarded.
+    if(*it < 32 ) 
+    {
 
-    // if(*it < 32) return event::type::SPECIAL;
-    // if(*it < 127) return event::type::SPECIAL;
-    //return parse_utf8();
-    //---------------------------------------------------------------
-    return event::type::UNCOMPLETED;
+        _ev_.event_type = event::type::key_command;
+        book::out() << "KEY_COMMAND: " << ui::color::yellow << (int)*it << ui::color::reset << "';";
+        if(keyevent tmpkev = keyevent::query(*it); tmpkev.mnemonic != keyevent::None)
+        {
+            _ev_.data.kev=tmpkev;
+            return _ev_.event_type;
+        }
+        _ev_.data.kev.code = *it;
+        return _ev_.event_type;
+    }
+    // -- key input. 
+    book::out() << "CHARACTER:'" << ui::color::yellow << *it << ui::color::reset << "';";
+    _ev_.data.kev = keyevent::nokey;
+    _ev_.event_type = event::type::CHARACTER; // Extra bytes are all ignored.
+    _ev_.data.kev.code = *it;
+    return _ev_.event_type;
 }
+
 
 event::type event::conio_parser::parse_esc(event& evd)
 {
@@ -407,16 +419,17 @@ event::type event::conio_parser::parse_esc(event& evd)
 
 event::type event::conio_parser::parse_ss_1_2(event &evd)
 {
-    // 8 bytes max which include the beginning of the buffer (ESC;O | [)
+        // 8 bytes max which include the beginning of the buffer (ESC;O | [)
 
     // Consume the buffer. keyevent::ansi_seq is now the final location.
-    std::strncpy(evd.data.kev.ansi_seq, evd.buffer.c_str(), 19);
-
-    evd.buffer.clear();
+    book::debug() << book::fn::function;
+    book::out() << "copy seq into event kev ansi_seq: ";
+    std::strncpy(evd.data.kev.ansi_seq, _seq_.data(), 19);
 
     auto& code = evd.data.kev.code;
+    code = 0;
     auto ln = std::min(size_t(8),std::strlen(evd.data.kev.ansi_seq));
-
+    book::out() << " Check: ansi_seq to parse: {" << ui::color::yellow << lus::string::bytes(evd.data.kev.ansi_seq) << ui::color::reset << "}:";
 
     U8 _b_ = evd.data.kev.ansi_seq[0]; // start with ESC byte
     code = (code << 8) | _b_;
@@ -427,17 +440,17 @@ event::type event::conio_parser::parse_ss_1_2(event &evd)
     {
         _b_ = evd.data.kev.ansi_seq[x];
         code = (code << 8) | _b_;
+        book::out() << std::format("{:04x}",code);
         if(keyevent tmp_kev = keyevent::query(code); tmp_kev.mnemonic != keyevent::None)
         {
+            book::out() << "Match:" << ui::color::lime << tmp_kev.description << ui::color::reset;
             evd.data.kev = tmp_kev;
             evd.event_type = event::type::key_command;
             return evd.event_type;
         }
-        // Str << "0x\\{02x}" << (_b_ & 0xff);
-        // if((x)<ln) Str , ',';
     }
 
-    return event::type::key_command;
+    return event::type::noop;
 }
 
 
@@ -449,30 +462,32 @@ event::type event::conio_parser::parse_dcs()
 event::type event::conio_parser::parse_csi(event& evd)
 {
 
-    book::log() << book::fn::function;
+    book::debug() << book::fn::function;
 
     bool altered = false;
     int argument = 0;
     std::vector<int> arguments;
     while (true) {
         if (!eat()) {
+            book::out() << " End of the sequence ";
             return event::type::UNCOMPLETED;
         }
 
         if (*it == '<') {
+            book::out() << " altered mode";
             altered = true; // Just bypass ...for now...
             continue;
         }
 
         if (*it >= '0' && *it <= '9') {
-            book::out() << "cursor: '" << ui::color::yellow << *it << ui::color::reset << "'";
+            book::out() << "cursor on digit: '" << ui::color::yellow << (*it-'0') << ui::color::reset << "'";
             argument *= 10;  // NOLINT
             argument += *it - '0';
             continue;
         }
 
         if (*it == ';') {
-            book::out() << "push arg: '" << ui::color::yellow << argument << ui::color::reset;
+            book::out() << "arg separator: arg value: '" << ui::color::yellow << argument << ui::color::reset << "' ";
             arguments.push_back(argument);
             argument = 0;
             continue;
@@ -484,7 +499,7 @@ event::type event::conio_parser::parse_csi(event& evd)
         // To handle F1-F4, we exclude '['.
         if (*it >= '@' && *it <= '~' && *it != '<' && *it != '[')
         {
-            book::out() << "push arg: '" << ui::color::yellow << argument << ui::color::reset;
+            book::out() << "CSI completed: last arg : '" << ui::color::yellow << argument << ui::color::reset << "' ";
             arguments.push_back(argument);
             argument = 0;  // NOLINT
             int c=1;
@@ -497,9 +512,12 @@ event::type event::conio_parser::parse_csi(event& evd)
                 case 'R':
                     return parse_caret_report(std::move(arguments));
                 default:
-                    return event::type::SPECIAL;
+                    book::out() << " Switching to parse_ss_1_2():";
+                    return parse_ss_1_2(evd);
             }
         }
+        book::out() << " Unterminated CSI: switchting to parse_ss_1_2";
+        return parse_ss_1_2(evd);
 
         // Invalid ESC in CSI.
         if (*it == '\x1B') {

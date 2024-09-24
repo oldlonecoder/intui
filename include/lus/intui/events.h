@@ -123,17 +123,14 @@ struct keyevent
         None,
 
     };
-    keyevent(u64 _code, const char* _desc, keyevent::enums _e):
-        code(_code),
-        description(_desc),
-        mnemonic(_e)
-    {}
-
-    U64 code{0};
-    std::string_view description{};
-    const char* ansi_seq{nullptr};
+    U64 code{0}; ///< enough room for each BYTE ex [SHIFT+F5] bytes sequence: 0x1b,0x5b,0x31,0x35,0x3b,0x32,0x7e
+                 ///< is compressed into 0x00005B31353B327E => 1b can be removed knowing it is a (ctrl)sequence.
+                 ///< ...But we need to compact the bytes sequence into a u64 each time.
+                 ///< so it needs to be verified if U64==U64 vs str comp is that faster so we can switch
+                 ///< And maybe even enough to include data from incoming(as of sept 11,2024) support to mouse events.
+    std::string_view description;
+    char ansi_seq[20]; // Null-terminated chars array - We keep storing the raw sequence in string of bytes
     keyevent::enums  mnemonic{enums::None};
-
     using keydb = std::map<u64,keyevent>;
     using key_group = std::vector<keyevent>;
     using list      = keyevent::key_group;
@@ -147,6 +144,7 @@ struct keyevent
     static const keyevent& query(U64 key_code);
     static const keyevent& query(keyevent::key_group& k_db, U64 key_code);
     std::string_view sequence();
+
 };
 
 
@@ -213,7 +211,7 @@ struct event
      *
      */
 
-    //event(){}
+
     static book::code get_stdin_event(event& _event_, int msec=-1);
     static book::code init();
     static mouse mouse_dev;
@@ -243,12 +241,12 @@ struct event
         mouse           mev;
         commandevent    cmdev;
         fileinputevent  fev;
-    }data;
+    }data{};
 
 
 private:
 
-    std::string buffer{};
+
     static void shutdown_listeners();
 
     /*!
@@ -266,6 +264,7 @@ private:
     {
         std::string_view _seq_;
         std::string_view::iterator it{};
+        
         enum class type :u8 {
             // Copyright 2020 Arthur Sonzogni. All rights reserved.
             // https://github.com/ArthurSonzogni/FTXUI
@@ -285,7 +284,7 @@ private:
         ~conio_parser();
         // Inspired from https://github.com/ArthurSonzogni/FTXUI
         // [ terminal_input_parser.hpp/cpp ]
-        event::type parse(event&);
+        event::type parse(event&, const char*);
         event::type parse_utf8();
         event::type parse_esc(event& evd);
         event::type parse_dcs();
@@ -296,6 +295,7 @@ private:
         event::type parse_caret_report(std::vector<int> _args);
 
     };
+
 
 };
 
