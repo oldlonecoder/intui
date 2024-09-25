@@ -35,6 +35,7 @@ add_library(${BaseTarget} STATIC  #SHARED
             include/${BaseTarget}/elements/element.h  cc/intui/elements/element.cc
             include/${BaseTarget}/events.h             cc/intui/events.cc
             include/${BaseTarget}/application.h        cc/intui/application.cc
+            include/intui/elements/screen.h cc/intui/elements/screen.cc
             
 )
 

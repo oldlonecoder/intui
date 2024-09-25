@@ -30,6 +30,7 @@ void test_element()
 {
     ui::element* widget = new ui::element(nullptr,"elementary");
     widget->set_theme("C128");
+    //widget->set_geometry(lus::intui::terminal::geometry());
     widget->set_geometry({{1,1}, ui::size{40,5}});
     auto painter = widget->begin_paint({});
     painter.clear();

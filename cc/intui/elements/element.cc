@@ -23,7 +23,7 @@
 
 #include "intui/elements/element.h"
 #include <cstring>
-
+#include "intui/elements/screen.h"
 
 
 using namespace lus::intui::globals;
@@ -275,6 +275,10 @@ book::code element::end_paint(element::brush& _brush)
     book::log() << book::fn::function;
     book::out() << "Brush area was:" << color::lime << _brush._rect_.tostring() << color::reset;
     book::out() << "dirty rect: " << color::lime << _dirty_rect_.tostring() << color::reset;
+    if(this != screen::instance().get())
+    {
+        ;
+    }
     //...
     return book::code::done;
 }
