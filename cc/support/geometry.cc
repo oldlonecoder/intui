@@ -260,7 +260,7 @@ bool size::has_minmax() const
 
 rectangle::operator std::string() const
 {
-    return std::format("{},{} [{},{}; {}x{}]", cursor.x, cursor.y, a.x, a.y, b.x, b.y, dwh.w, dwh.h);
+    return std::format("{},{} [{},{}; {}x{}]", cursor.x, cursor.y, a.x, a.y, dwh.w, dwh.h);
 }
 
 std::string rectangle::tostring() const
@@ -552,8 +552,11 @@ rectangle rectangle::operator/(const rectangle &rhs) const
 rectangle rectangle::operator|(const rectangle &r) const
 {
     rectangle tmp;
-    cxy a_ = {r.a.x <= a.x ? r.a.x : a.x, r.a.y <= a.y ? r.a.y : a.y};
-    cxy b_ = {r.b.x <= b.x ? r.b.x : b.x, r.b.y <= b.y ? r.b.y : b.y};
+    // cxy a_ = {r.a.x <= a.x ? r.a.x : a.x, r.a.y <= a.y ? r.a.y : a.y};
+    // cxy b_ = {r.b.x <= b.x ? r.b.x : b.x, r.b.y <= b.y ? r.b.y : b.y};
+    cxy a_ = {std::min(r.a.x,a.x), std::min(r.a.y,a.y)};
+    cxy b_ = {std::max(r.b.x,b.x), std::max(r.b.y,b.y)};
+
     tmp.assign(a_, b_);
     return tmp;
 }

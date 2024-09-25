@@ -272,7 +272,9 @@ element::brush element::begin_paint(rectangle _region)
 book::code element::end_paint(element::brush& _brush)
 {
     _dirty_rect_ = _dirty_rect_ | _brush._rect_;
-
+    book::log() << book::fn::function;
+    book::out() << "Brush area was:" << color::lime << _brush._rect_.tostring() << color::reset;
+    book::out() << "dirty rect: " << color::lime << _dirty_rect_.tostring() << color::reset;
     //...
     return book::code::done;
 }

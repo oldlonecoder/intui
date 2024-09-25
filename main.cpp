@@ -33,6 +33,10 @@ void test_element()
     widget->set_geometry({{1,1}, ui::size{40,5}});
     auto painter = widget->begin_paint({});
     painter.clear();
+
+    //...
+
+    widget->end_paint(painter);
     intui::event ev{};
     intui::event::get_stdin_event(ev,-1);
 
