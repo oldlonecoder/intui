@@ -3,7 +3,7 @@
 //#include "intui/lexer/lexer.h"
 //#include "intui/est/alu.h"
 #include "intui/est/expression.h"
-//#include "intui/elements/element.h"
+#include "intui/elements/element.h"
 #include "intui/io/linux/terminal.h"
 #include "intui/events.h"
 #include "intui/application.h"
@@ -24,9 +24,20 @@ protected:
 
 }
 
+using namespace lus;
 
+void test_element()
+{
+    ui::element* widget = new ui::element(nullptr,"elementary");
+    widget->set_theme("C128");
+    widget->set_geometry({{1,1}, ui::size{40,5}});
+    auto painter = widget->begin_paint({});
+    painter.clear();
+    intui::event ev{};
+    intui::event::get_stdin_event(ev,-1);
 
-
+    delete widget;
+}
 
 
 book::code expression()
@@ -100,20 +111,20 @@ int main()
 
     terminal.begin();
     
-    lus::intui::event event{};
-    book::code C{book::code::ok};
+    //lus::intui::event event{};
+    // book::code C{book::code::ok};
 
-    while(C != book::code::terminate)
-    {
-        C = lus::intui::event::get_stdin_event(event,-1);
-        if(event.event_type == lus::intui::event::type::MOUSE)
-        {
-            lus::intui::terminal::cursor({1,1});
-            std::cout << event.data.mev.to_string();
-            fflush(stdout);
-        }
-    }
-
+    // while(C != book::code::terminate)
+    // {
+    //     C = lus::intui::event::get_stdin_event(event,-1);
+    //     if(event.event_type == lus::intui::event::type::MOUSE)
+    //     {
+    //         lus::intui::terminal::cursor({1,1});
+    //         std::cout << event.data.mev.to_string();
+    //         fflush(stdout);
+    //     }
+    // }
+    test_element();
     terminal.stop_mouse();
     terminal.end();
     //element();

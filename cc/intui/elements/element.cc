@@ -36,14 +36,21 @@ element::element(object* _parent_obj, const std::string a_id):object(_parent_obj
 
 element::~element()
 {
+    book::log() << "release '" << color::yellow << id() << color::reset << "'s bloc...";
     delete [] _bloc_;
 }
 
 
 book::code element::set_theme(std::string_view _theme_name)
 {
-    _style_ = colors::attr_db::theme()[_theme_name][class_name()];
+    _style_ = colors::attr_db::theme()[_theme_name]["element"];
+    book::log() << color::yellow << id() << color::reset << "'s theme set to '" << color::lime << _theme_name << color::reset << ".";
     return book::code::accepted;
+}
+
+color::pair element::colors()
+{
+    return _style_[_state_];
 }
 
 
@@ -56,10 +63,11 @@ book::code element::set_geometry(rectangle&& _geom)
             return book::code::accepted;
     }
     _rect_ = std::move(_geom);
+    book::log() << "element '" << color::yellow << id() << color::reset << "' geometry:" << color::lime << _rect_.tostring() << color::reset << '.';
     if(!_rect_)
         return book::code::rejected;
     
-    if(_bloc_) delete  [] _bloc_;
+    delete  [] _bloc_;
     _bloc_ = new ansi32[_rect_.dwh.area()+ *_rect_.width()];
     std::memset(_bloc_,0, _rect_.dwh.area());
 
@@ -128,6 +136,7 @@ element::brush::brush(element *_element, rectangle _region): _element_(_element)
 
     // Init cursors and pointers:
     home();
+    _colors_ = _element_->colors();
 }
 
 
@@ -179,6 +188,7 @@ element::brush &lus::ui::element::brush::operator<<(const char *_str)
 
     // put the text at the _caret_, confine the text into our geometry.
     auto ci = _str;
+
     // NoWrap and stops at the brush's width:
     //while(*ci && (ci - _str) < (*_rect_.width()-(ci-_str))) **(_caret_++) << *ci++;
     // else
@@ -214,6 +224,28 @@ book::code element::brush::cursor(ui::cxy xy)
     return book::code::accepted;
 }
 
+void element::brush::clear()
+{
+    home();
+    for(int y=0;y<_rect_.height(); y++)
+    {
+        _caret_ = _element_->peek(_rect_.a + cxy{0,y});
+        for(int x=0;x<_rect_.width();x++) **_caret_++ << _colors_ << ' ';
+    }
+    home();
+}
+
+
+ui::cxy element::brush::get_local_xy() const
+{
+    return _rect_.cursor;
+}
+
+ui::cxy element::brush::get_element_xy()
+{
+    return _rect_.cursor + _rect_.top_left();
+}
+
 
 void element::dealloc()
 {
@@ -237,9 +269,9 @@ element::brush element::begin_paint(rectangle _region)
     return element::brush{this, _region};
 }
 
-book::code element::end_paint(element::brush& _bruh)
+book::code element::end_paint(element::brush& _brush)
 {
-    _dirty_rect_ = _dirty_rect_ | _bruh._rect_;
+    _dirty_rect_ = _dirty_rect_ | _brush._rect_;
 
     //...
     return book::code::done;
@@ -255,12 +287,12 @@ book::code element::update()
 
 book::code element::update_child(element *_child_element)
 {
-    ui::rectangle r;
+    rectangle r;
     if(!_child_element->_dirty_rect_) return book::code::rejected;
     if(!_dirty_rect_)
-        r = _dirty_rect_ = ui::rectangle{_child_element->_dirty_rect_ + _child_element->_rect_.a};
+        r = _dirty_rect_ = rectangle{_child_element->_dirty_rect_ + _child_element->_rect_.a};
     else     
-        r = ui::rectangle{_child_element->_dirty_rect_ + _child_element->_rect_.a} | _dirty_rect_;
+        r = rectangle{_child_element->_dirty_rect_ + _child_element->_rect_.a} | _dirty_rect_;
     
     
     return book::code::accepted;
@@ -269,17 +301,6 @@ book::code element::update_child(element *_child_element)
 element::brush::operator bool() const
 {
     return _rect_ && _element_;
-}
-
-
-ui::cxy element::brush::get_local_xy() const
-{
-    return _rect_.cursor;
-}
-
-ui::cxy element::brush::get_element_xy()
-{
-    return _rect_.cursor + _rect_.top_left();
 }
 
 

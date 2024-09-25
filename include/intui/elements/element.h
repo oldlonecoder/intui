@@ -41,6 +41,7 @@ protected:
     intui::globals::colors::attr_db::components _style_{};
     color::pair _color_{};
     rectangle _dirty_rect_{};
+    intui::globals::wstate::Type _state_{intui::globals::wstate::Active};
 
 public:
     element();
@@ -49,6 +50,8 @@ public:
 
 
     book::code set_theme(std::string_view theme_name);
+    color::pair colors();
+
     rectangle geometry() const { return _rect_; }
     book::code set_geometry(rectangle&& _geom);
 
@@ -81,6 +84,7 @@ public:
         element* _element_{nullptr};
         rectangle _rect_{}; ///< Sub rectangle relative to the element's drawing area;
         ansi32*   _caret_{nullptr};
+        color::pair _colors_{};
 
         brush() = default;
         brush(element* _element, rectangle _region);
@@ -106,6 +110,8 @@ public:
         ui::cxy get_local_xy() const;
         ui::cxy get_element_xy();
         operator bool() const;
+
+        void clear();
 
     };
 
