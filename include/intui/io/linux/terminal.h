@@ -43,7 +43,7 @@ namespace lus::intui
  * @brief class terminal initilizes and handles few console/terminal io requests in the ansi-/DEC/VT-x protocoles.
  * 
  */
-class LUS_API terminal final
+class INTUI_API terminal final
 {
 
     static ui::rectangle    _geometry_;
@@ -96,7 +96,7 @@ public:
         alternate_screen        = 1049
     };
 
-    struct LUS_API request{};
+    struct INTUI_API request{};
     static ui::rectangle geometry() { return _geometry_;}
     static constexpr const char* CSI = "\x1b[";
 

@@ -34,7 +34,7 @@ using namespace integers;
  * @note Does NOT support UTF encoded data. Only one-byte utf-8 chars such as accent and glyphes encoded as index into my own table of hardcoded "utf-8 strings",
  *       using std::string data as automatic/implicit conversion.
  */
-struct LUS_API ansi32 final
+struct INTUI_API ansi32 final
 {
     U32 chr = 0x8003A020;
     using string                   = std::vector<ansi32>;
@@ -78,19 +78,20 @@ struct LUS_API ansi32 final
     ansi32& set_colors(ui::color::pair&&Ch);
     // ansi32& ResetAttributes(ansi32::Type bits_);
 
-    ansi32&     set_colors(ui::color::pair&CP);
-    ansi32&     operator=(U32 Ch);
-    ansi32&     operator=(U32* Ch);
-    std::string get_utf_string() const;
+    ansi32& set_colors(ui::color::pair&CP);
 
+    ansi32& operator=(U32 Ch);
+    ansi32& operator=(ansi32 Ch) { chr = Ch.chr; return *this;}
+    ansi32& operator=(U32* Ch);
     ansi32& operator=(char Ch);
-
-
     ansi32& operator=(int Ch)
     {
         chr = Ch;
         return *this;
     };
+
+    std::string get_utf_string() const;
+
     ui::color::code     foreground() const;
     ui::color::code     background() const;
     ui::color::pair     colors() const;
@@ -108,7 +109,7 @@ struct LUS_API ansi32 final
 
     ansi32& operator <<(ansi32 Ch)
     {
-        *this = Ch;
+        chr = Ch.chr;
         return *this;
     }
 

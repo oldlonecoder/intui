@@ -22,7 +22,7 @@
 
 namespace lus
 {
-struct LUS_API lex_token
+struct INTUI_API lex_token
 {
     using list      = std::vector<lex_token>;
     using iterator  = lex_token::list::iterator;
@@ -42,7 +42,7 @@ struct LUS_API lex_token
     void                         numeric_tr();
     // ------------------------------------------------
 
-    struct LUS_API location_data
+    struct INTUI_API location_data
     {
         [[maybe_unused]] size_t                    line{0};
         [[maybe_unused]] size_t                    column{0};
@@ -56,7 +56,7 @@ struct LUS_API lex_token
     } token_location;
 
 
-    struct LUS_API token_flags
+    struct INTUI_API token_flags
     {
         uint8_t V: 1; // This token is a usable value into expression.
         uint8_t S: 1; // Post semantic parser: Left-Assignable Object

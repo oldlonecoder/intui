@@ -34,7 +34,7 @@ namespace lus::est
  *
  */
 
-struct LUS_API alu
+struct INTUI_API alu
 {
 
     static std::string mNil;
@@ -56,7 +56,7 @@ struct LUS_API alu
         val& operator=(std::string* v_) { t = v_; return *this;}
     }v = {0};
 
-    enum LUS_API CNV {
+    enum INTUI_API CNV {
         DEG,
         RAD
     };

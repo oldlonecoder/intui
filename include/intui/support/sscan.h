@@ -24,7 +24,7 @@ using namespace std::literals;
 namespace lus
 {
 
-class LUS_API sscan
+class INTUI_API sscan
 {
     const char* m_end{nullptr};
     const char* m_pos{nullptr};
@@ -35,7 +35,7 @@ public:
 
     using iterator = const char*;
 
-    struct LUS_API  [[maybe_unused]] context
+    struct INTUI_API  [[maybe_unused]] context
     {
         sscan::iterator m_pos{nullptr};
         sscan::iterator m_begin{nullptr};
@@ -43,13 +43,13 @@ public:
         //...
     };
 
-    struct LUS_API numeric
+    struct INTUI_API numeric
     {
         private:
         static sscan empty;
         public:
 
-        struct LUS_API details
+        struct INTUI_API details
         {
             std::string_view seq;
             enum class base_size : char
@@ -114,7 +114,7 @@ public:
     };
 
 public:
-    struct LUS_API location_data
+    struct INTUI_API location_data
     {
         // { \n; \n\r; \r\n; \r }
         std::size_t line{0};

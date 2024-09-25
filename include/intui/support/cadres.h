@@ -28,7 +28,7 @@ namespace lus::ui
 
 using namespace integers;
 
-struct LUS_API cadre
+struct INTUI_API cadre
 {
     color::pair colors;     ///< colours of the box::frame
 
@@ -37,7 +37,7 @@ struct LUS_API cadre
  * @brief 1v x 4h matrix for addressing Frame components
  * @note  : Source : https://github.com/ArthurSonzogni/FTXUI/blob/main/src/ftxui/screen/string.cpp
  */
-    struct LUS_API frame_matrix
+    struct INTUI_API frame_matrix
     {
         uint8_t Left : 2;
         uint8_t Top  : 2;
@@ -48,7 +48,7 @@ struct LUS_API cadre
         bool operator < (cadre::frame_matrix RHS) const;
     };
 
-    struct LUS_API frame_data
+    struct INTUI_API frame_data
     {
         glyph::T TL; ///< Top Left
         glyph::T TR; ///< Top Right

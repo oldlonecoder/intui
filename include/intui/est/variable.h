@@ -23,7 +23,7 @@
 
 namespace lus::est {
 
-class LUS_API variable : public node
+class INTUI_API variable : public node
 {
     std::stack<alu> _stack_{};
 

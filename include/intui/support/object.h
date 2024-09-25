@@ -18,7 +18,7 @@
 namespace lus
 {
 
-class  LUS_API object
+class  INTUI_API object
 {
     OBJECT_REFLECT_START(object)
     

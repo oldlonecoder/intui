@@ -30,7 +30,7 @@
 
 
 
-class LUS_API book
+class INTUI_API book
 {
 public:
     struct header_component
@@ -120,15 +120,15 @@ public:
     };
 
 
-    static std::string LUS_API to_string(book::type enum_type);
-    static std::string LUS_API to_string(book::code enum_code);
-    static std::string LUS_API to_string(book::fn   enum_fn);
-    static std::string LUS_API to_string(book::action enum_action);
+    static std::string INTUI_API to_string(book::type enum_type);
+    static std::string INTUI_API to_string(book::code enum_code);
+    static std::string INTUI_API to_string(book::fn   enum_fn);
+    static std::string INTUI_API to_string(book::action enum_action);
 
-    static std::pair<lus::glyph::type, lus::ui::color::pair> LUS_API type_attributes         (book::type enum_type);
-    static std::pair<lus::glyph::type, lus::ui::color::pair> LUS_API return_code_attributes  (book::code enum_code);
-    static std::pair<lus::glyph::type, lus::ui::color::pair> LUS_API function_attributes     (book::fn enum_fn);
-    static std::pair<lus::glyph::type, lus::ui::color::pair> LUS_API action_attributes       (book::action enum_action);
+    static std::pair<lus::glyph::type, lus::ui::color::pair> INTUI_API type_attributes         (book::type enum_type);
+    static std::pair<lus::glyph::type, lus::ui::color::pair> INTUI_API return_code_attributes  (book::code enum_code);
+    static std::pair<lus::glyph::type, lus::ui::color::pair> INTUI_API function_attributes     (book::fn enum_fn);
+    static std::pair<lus::glyph::type, lus::ui::color::pair> INTUI_API action_attributes       (book::action enum_action);
 
 
     
@@ -190,7 +190,7 @@ private:
 public:
     static void purge(const std::function<void(book &)>& f);
 
-    struct LUS_API section
+    struct INTUI_API section
     {
         std::string id;
         std::vector<book> contents{};
@@ -207,7 +207,7 @@ public:
     static book::code init(std::function<book::code()> inifn = nullptr);
     static book::code append_section(const std::string& section_id);
 
-    class LUS_API exception :  public std::exception
+    class INTUI_API exception :  public std::exception
     {
     public:
 

@@ -93,15 +93,15 @@ enum class action : integers::U8
 };
 
 
-std::string LUS_API to_string(enums::type enum_type);
-std::string LUS_API to_string(enums::code enum_code);
-std::string LUS_API to_string(enums::fn   enum_fn);
-std::string LUS_API to_string(enums::action enum_action);
+std::string INTUI_API to_string(enums::type enum_type);
+std::string INTUI_API to_string(enums::code enum_code);
+std::string INTUI_API to_string(enums::fn   enum_fn);
+std::string INTUI_API to_string(enums::action enum_action);
 
-std::pair<lus::glyph::type, ui::color::pair> LUS_API type_attributes         (enums::type enum_type);
-std::pair<lus::glyph::type, ui::color::pair> LUS_API return_code_attributes  (enums::code enum_code);
-std::pair<lus::glyph::type, ui::color::pair> LUS_API function_attributes     (enums::fn enum_fn);
-std::pair<lus::glyph::type, ui::color::pair> LUS_API action_attributes       (enums::action enum_action);
+std::pair<lus::glyph::type, ui::color::pair> INTUI_API type_attributes         (enums::type enum_type);
+std::pair<lus::glyph::type, ui::color::pair> INTUI_API return_code_attributes  (enums::code enum_code);
+std::pair<lus::glyph::type, ui::color::pair> INTUI_API function_attributes     (enums::fn enum_fn);
+std::pair<lus::glyph::type, ui::color::pair> INTUI_API action_attributes       (enums::action enum_action);
 
 
 }

@@ -26,7 +26,7 @@
 namespace lus::est 
 {
 
-class LUS_API expr : public bloc
+class INTUI_API expr : public bloc
 {
     lexer       _lexer_;
     token_table _token_table_;

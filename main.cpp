@@ -28,20 +28,27 @@ using namespace lus;
 
 void test_element()
 {
-    ui::element* widget = new ui::element(nullptr,"elementary");
-    widget->set_theme("C128");
-    //widget->set_geometry(lus::intui::terminal::geometry());
-    widget->set_geometry({{1,1}, ui::size{40,5}});
-    auto painter = widget->begin_paint({});
-    painter.clear();
+    try{
+        ui::element* widget = new ui::element(nullptr,"elementary");
+        widget->set_theme("C128");
+        //widget->set_geometry(lus::intui::terminal::geometry());
+        widget->set_geometry({{1,1}, ui::size{40,5}});
+        auto painter = widget->begin_paint({});
+        painter.clear();
+        painter << "42";
+        //...
 
-    //...
+        widget->end_paint(painter);
+        widget->update();
+        intui::event ev{};
+        intui::event::get_stdin_event(ev,-1);
 
-    widget->end_paint(painter);
-    intui::event ev{};
-    intui::event::get_stdin_event(ev,-1);
-
-    delete widget;
+        delete widget;
+    }
+    catch(book::exception& e)
+    {
+        std::cout << "book::exception: " << e.what();
+    }
 }
 
 

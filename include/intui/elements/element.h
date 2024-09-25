@@ -28,7 +28,7 @@
 namespace lus::ui
 {
 
-class LUS_API element : public object
+class INTUI_API element : public object
 {
     OBJECT_REFLECT(element)
 
@@ -53,7 +53,7 @@ public:
     color::pair colors();
 
     rectangle geometry() const { return _rect_; }
-    book::code set_geometry(rectangle&& _geom);
+    book::code set_geometry(rectangle _geom);
 
 
     template<typename T=int> std::optional<T> width() const
@@ -63,7 +63,7 @@ public:
     
     template<typename T=int> std::optional<T> height() const
     {
-        return _rect_.width<T>();
+        return _rect_.height<T>();
     }
 
     element& operator*() { return *this; }
@@ -79,7 +79,7 @@ public:
 #pragma region draw
 
 
-    struct LUS_API brush final 
+    struct INTUI_API brush final 
     {
         element* _element_{nullptr};
         rectangle _rect_{}; ///< Sub rectangle relative to the element's drawing area;
@@ -121,6 +121,7 @@ public:
     book::code  end_paint(element::brush& _brush);
     book::code update();
     book::code update_child(element* _chil_element);
+    void renderline(int line_num);
     
 #pragma endregion draw
 };

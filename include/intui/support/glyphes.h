@@ -21,7 +21,7 @@
 namespace lus
 {
 
-struct LUS_API glyph
+struct INTUI_API glyph
 {
 
     using T = const char*;
@@ -363,7 +363,7 @@ For anyone interested, here'Code the fixed version (I hope you don't mind, I'll 
 
 
 
-struct LUS_API accent_fr
+struct INTUI_API accent_fr
 {
     using T = const char*;
 

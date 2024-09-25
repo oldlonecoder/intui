@@ -23,7 +23,7 @@
 namespace lus::est 
 {
 
-class LUS_API bloc : public node
+class INTUI_API bloc : public node
 {
 
 public: 

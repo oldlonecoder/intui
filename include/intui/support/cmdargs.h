@@ -22,7 +22,7 @@ namespace lus::cmd
 {
 
 
-struct LUS_API cmd_switch
+struct INTUI_API cmd_switch
 {
     using data = std::vector<std::string_view>;
     using array = std::vector<cmd_switch*>;
@@ -55,7 +55,7 @@ struct LUS_API cmd_switch
 };
 
 
-class LUS_API line
+class INTUI_API line
 {
 
     cmd_switch::array arguments;

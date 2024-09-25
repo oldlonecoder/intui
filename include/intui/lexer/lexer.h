@@ -25,11 +25,11 @@
 namespace lus
 {
 
-class LUS_API lexer
+class INTUI_API lexer
 {
 public:
 
-    struct LUS_API config_data
+    struct INTUI_API config_data
     {
         std::string_view text{};
         token_table*      production{nullptr};

@@ -102,7 +102,7 @@ std::string ansi32::get_utf_string() const
 
 ansi32 &ansi32::operator=(char Ch)
 {
-    chr = (chr & (CMask|Underline|Stroke|Blink|TRGB))  | ASCII | Ch;
+    chr = (chr & ~(CharMask|UGlyph|Accent|Frame)) | (chr & (CMask|Underline|Stroke|Blink|TRGB))  | ASCII | Ch;
     return *this;
 }
 
@@ -156,7 +156,7 @@ ui::cadre::index ansi32::frame_id() const
 
 char ansi32::ascii() const
 {
-    return static_cast<char>(chr & CharMask);
+    return static_cast<char>(chr & 0xff);
 }
 
 [[maybe_unused]] uint16_t ansi32::attributes() const
@@ -202,7 +202,7 @@ ansi32& ansi32::operator<<(ui::color::pair CP)
 
 ansi32& ansi32::operator<<(char Ch)
 {
-    *this = (chr & ~(UTFBITS|CharMask)) | (chr & (Underline|Stroke|Blink)) | ASCII | Ch;
+    chr = (chr & ~(UTFBITS|CharMask)) | (chr & (Underline|Stroke|Blink)) | ASCII | (Ch & 0xff);
     return *this;
 }
 
@@ -252,7 +252,9 @@ std::string ansi32::render(const ansi32::string& _string)
                 else 
                     if(ch.chr & ansi32::UGlyph)
                         _o += lus::glyph::data[ch.icon_id()];
-        }   
+        }
+        else
+            _o += ch.ascii();
     }
     return _o;
 }
@@ -284,7 +286,9 @@ std::string ansi32::render(const ansi32* _blk, int _width)
                 else 
                     if(ch.chr & ansi32::UGlyph)
                         _o += lus::glyph::data[ch.icon_id()];
-        }   
+        }
+        else
+            _o += ch.ascii();
     }
     return _o;
 }
@@ -315,7 +319,7 @@ std::string ansi32::details() const
     else
         utf_info << ascii();
     infos << "| foreground color:" << ui::color::name(foreground()) << "| background color:" << ui::color::name(background());
-    infos << " char code:'" << utf_info << "';";
+    infos << " char code:[" << utf_info << "]";
     if(chr & Underline) infos << "|Underline";
     if(chr & Stroke) infos << "|Stroke";
     if(chr & Blink) infos << "|Blink";

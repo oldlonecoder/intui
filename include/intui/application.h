@@ -26,7 +26,7 @@
 namespace lus::intui
 {
 
-class LUS_API application : public object
+class INTUI_API application : public object
 {
     OBJECT_REFLECT(application)
 

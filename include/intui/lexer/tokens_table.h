@@ -20,7 +20,7 @@
 namespace lus
 {
 
-class LUS_API token_table
+class INTUI_API token_table
 {
     
 protected:

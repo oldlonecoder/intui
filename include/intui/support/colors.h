@@ -21,7 +21,7 @@
 namespace lus::ui
 {
 
-struct LUS_API color {
+struct INTUI_API color {
     enum code : integers::U16 {
         /*0   */ black = 0,         //#000000	rgb(128,0,0)	hsl(0,100%,25%)
         /*1   */ maroon,            //#800000	rgb(128,0,0)	hsl(0,100%,25%)
@@ -281,7 +281,7 @@ struct LUS_API color {
         /*255 */ reset
     };
 
-    struct LUS_API pair
+    struct INTUI_API pair
     {
         color::code fg = color::white;
         color::code bg = color::grey11;
@@ -290,7 +290,7 @@ struct LUS_API color {
         color::pair &operator>>(std::string &out);
     };
 
-    struct LUS_API data
+    struct INTUI_API data
     {
         color::code Enum = color::reset;
         std::string_view color_name = " ";
@@ -315,7 +315,7 @@ struct LUS_API color {
     static std::string render_html(color::pair a_pair);
     static color::data query_data(color::code a_code);
 
-    // struct LUS_API Item {
+    // struct INTUI_API Item {
     //     std::string Id;
     //     Color::Pair Data;
     //     using array = std::vector<Color::Item>;
@@ -324,7 +324,7 @@ struct LUS_API color {
     // };
 
 
-    // struct LUS_API array {
+    // struct INTUI_API array {
     //     using Dictionary = std::unordered_map<std::string, Color::array>;
     //     std::string Id;
     //     Color::Item::array Items;

@@ -24,7 +24,7 @@
 #include "intui/elements/element.h"
 #include <cstring>
 #include "intui/elements/screen.h"
-
+#include "intui/io/linux/terminal.h"
 
 using namespace lus::intui::globals;
 
@@ -43,7 +43,7 @@ element::~element()
 
 book::code element::set_theme(std::string_view _theme_name)
 {
-    _style_ = colors::attr_db::theme()[_theme_name]["element"];
+    _style_ = colors::attr_db::theme()[_theme_name]["Widget"];
     book::log() << color::yellow << id() << color::reset << "'s theme set to '" << color::lime << _theme_name << color::reset << ".";
     return book::code::accepted;
 }
@@ -55,7 +55,7 @@ color::pair element::colors()
 
 
 
-book::code element::set_geometry(rectangle&& _geom)
+book::code element::set_geometry(rectangle _geom)
 {
     if(_rect_)
     {
@@ -69,7 +69,7 @@ book::code element::set_geometry(rectangle&& _geom)
     
     delete  [] _bloc_;
     _bloc_ = new ansi32[_rect_.dwh.area()+ *_rect_.width()];
-    std::memset(_bloc_,0, _rect_.dwh.area());
+    std::memset(_bloc_,0x20, _rect_.dwh.area());
 
     return book::code::accepted;
 }
@@ -83,11 +83,13 @@ book::code element::set_geometry(rectangle&& _geom)
  */
 ansi32 *lus::ui::element::peek(ui::cxy xy)
 {
-    if(!_rect_[xy+_rect_.top_left()])
+    if(!local_geometry()[xy])
     {
         throw book::exception() [
             book::except() << book::code::oob 
-            << ui::color::red4 << xy 
+            << ui::color::red4 << xy
+            << ui::color::reset << " => "
+            << ui::color::red3 << _rect_.tostring()
             << ui::color::reset  << " in method element::peek()"
         ];
         // book::error() << book::fn::function;
@@ -127,16 +129,19 @@ element::brush::brush(element *_element, rectangle _region): _element_(_element)
     } 
 
     if(!_rect_)
-        _rect_ = _element->geometry() - _element->geometry().top_left(); 
+        _rect_ = _element->local_geometry();
     else 
     {
         if(_rect_ = _element->intersect(_region); !_rect_)
-            _rect_ = _element->geometry() - _element->geometry().top_left();    
+            _rect_ = _element->local_geometry();
     }
 
     // Init cursors and pointers:
     home();
+    book::debug() << "element::brush construct region= " << _rect_.tostring();
     _colors_ = _element_->colors();
+    book::debug() << book::fn::function;
+    book::out() << "fg: " << color::name(_colors_.fg) << " bg: " << color::name(_colors_.bg);
 }
 
 
@@ -211,7 +216,7 @@ element::brush &lus::ui::element::brush::operator<<(const char *_str)
 inline book::code element::brush::home()
 {
     _rect_.home();
-    _caret_ = _element_->peek(_rect_.top_left());
+    _caret_ = _element_->peek(_rect_.a);
 
     return book::code();
 }
@@ -227,11 +232,13 @@ book::code element::brush::cursor(ui::cxy xy)
 void element::brush::clear()
 {
     home();
-    for(int y=0;y<_rect_.height(); y++)
-    {
-        _caret_ = _element_->peek(_rect_.a + cxy{0,y});
-        for(int x=0;x<_rect_.width();x++) **_caret_++ << _colors_ << ' ';
-    }
+    _caret_ = _element_->peek({0,0});
+    ansi32 ch;
+    ch.set_colors(_colors_);
+    ch = ' ';
+    book::debug() << book::fn::function;
+    book::out() << "clear with attributes: " << ch.details();
+    for(int i = 0; i<_rect_.dwh.area(); i++){_caret_->chr = ch.chr; ++_caret_; }
     home();
 }
 
@@ -287,7 +294,12 @@ book::code element::end_paint(element::brush& _brush)
 
 book::code element::update()
 {
-    
+    for(int y=0; y < *height(); y++)
+    {
+        renderline(y);
+        intui::terminal::cursor(_rect_.a + cxy{0,y});
+        fflush(stdin);
+    }
     return book::code::accepted;
 }
 
@@ -302,6 +314,14 @@ book::code element::update_child(element *_child_element)
     
     
     return book::code::accepted;
+}
+
+void element::renderline(int line_num)
+{
+    auto* s = peek({0,line_num});
+    book::debug() << "renderline: peek details :" << s->details();
+    std::cout << ansi32::render(s, *width());
+
 }
 
 element::brush::operator bool() const

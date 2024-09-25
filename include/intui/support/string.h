@@ -44,7 +44,7 @@ using namespace integers;
 /*!
  * @brief tux string for accumulating substring using std tools such as std::instrstram; ostringstream; std::fmt.
  */
-class LUS_API string final
+class INTUI_API string final
 {
     std::string _d_;
 public:
@@ -128,7 +128,7 @@ public:
 
     #pragma region tokenizer
 
-    struct LUS_API word final
+    struct INTUI_API word final
     {
         std::string::iterator begin{};
         std::string::iterator last{}; ///< not the std::string::end() but really the last valid character pointer int the word.

@@ -18,7 +18,7 @@ namespace lus::ui
 {
 
 
-struct LUS_API cxy {
+struct INTUI_API cxy {
 
     int x = -1;
     int y = -1;
@@ -60,7 +60,7 @@ struct LUS_API cxy {
 };
 
 
-struct LUS_API size {
+struct INTUI_API size {
     int w = 0;
     int h = 0;
     // size policies:
@@ -89,7 +89,7 @@ struct LUS_API size {
  * @author oldlonecoder (lussier.serge@gmail.com)
  *
  */
-struct LUS_API rectangle {
+struct INTUI_API rectangle {
 
     cxy a{0, 0};
     cxy b{0, 0};
@@ -212,7 +212,7 @@ struct LUS_API rectangle {
 };
 
 
-struct LUS_API string2d
+struct INTUI_API string2d
 {
     lus::string win{};
     rectangle r;
