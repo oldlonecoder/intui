@@ -69,7 +69,8 @@ book::code element::set_geometry(rectangle _geom)
     
     delete  [] _bloc_;
     _bloc_ = new ansi32[_rect_.dwh.area()+ *_rect_.width()];
-    std::memset(_bloc_,0x20, _rect_.dwh.area());
+
+    _clear_();
 
     return book::code::accepted;
 }
@@ -294,12 +295,13 @@ book::code element::end_paint(element::brush& _brush)
 
 book::code element::update()
 {
+
     for(int y=0; y < *height(); y++)
     {
+        intui::terminal::cursor({top_left() + cxy{0,y} });
         renderline(y);
-        intui::terminal::cursor(_rect_.a + cxy{0,y});
-        fflush(stdin);
     }
+
     return book::code::accepted;
 }
 
@@ -320,8 +322,28 @@ void element::renderline(int line_num)
 {
     auto* s = peek({0,line_num});
     book::debug() << "renderline: peek details :" << s->details();
-    std::cout << ansi32::render(s, *width());
+    auto out = ansi32::render(s, *width());
+    std::cout << out;
+    fflush(stdout);
 
+}
+
+void element::_clear_()
+{
+    ansi32 C;
+    auto colors = _style_[_state_];
+    C.set_colors(colors);
+    C << ' ';
+    ansi32* w = _bloc_;
+    auto sz = _rect_.dwh.area();
+
+    book::debug() << book::fn::function;
+    book::out() << "clear with attributes: " << C.details();
+    for(int i=0; i < sz; i++)
+    {
+        w->chr = C.chr;
+        ++w;
+    }
 }
 
 element::brush::operator bool() const

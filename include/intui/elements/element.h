@@ -124,6 +124,8 @@ public:
     void renderline(int line_num);
     
 #pragma endregion draw
+private:
+    void _clear_();
 };
 
 

@@ -259,6 +259,8 @@ std::string ansi32::render(const ansi32::string& _string)
     return _o;
 }
 
+#define _eol_ ui::color::pair(ui::color::reset, ui::color::reset)()
+
 std::string ansi32::render(const ansi32* _blk, int _width)
 {
     ui::color::pair _cp = _blk->colors();
@@ -290,6 +292,7 @@ std::string ansi32::render(const ansi32* _blk, int _width)
         else
             _o += ch.ascii();
     }
+    _o += _eol_;
     return _o;
 }
 
@@ -319,7 +322,7 @@ std::string ansi32::details() const
     else
         utf_info << ascii();
     infos << "| foreground color:" << ui::color::name(foreground()) << "| background color:" << ui::color::name(background());
-    infos << " char code:[" << utf_info << "]";
+    infos << " char:['" << utf_info() << "']";
     if(chr & Underline) infos << "|Underline";
     if(chr & Stroke) infos << "|Stroke";
     if(chr & Blink) infos << "|Blink";
