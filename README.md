@@ -1,4 +1,11 @@
+# Removing this repo. Edited this README on site to prevent future pulls and pushes
+* Wrong [UI] design
+* Wrong project layout and directory structure because:
+* Mishandled code imports from my other existing projects.
+* Wrong naming design
+* bad logistic/decisions.
 
+---
 # intui :  { Personal Application Tools and Journal API }
 
 ---
